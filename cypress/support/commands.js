@@ -29,21 +29,23 @@ Cypress.Commands.add("deleteProducts", (product) => {
 
             var responseBody;
             
-            // Store the response JSON of the product list
+            // Store the response array of products
             cy.request('http://localhost:3000/api/v1/products')
                 .then((response) => {
                     responseBody = response.body;
                 })
             
-            for (var productJson in responseBody){
-                if(productJson.prod_name == product.name){
+                // loop through the array of objects
+            responseBody.array.forEach(browserProduct => {
+                if(browserProduct.prod_name == product.name){
                      // Send a DELETE request to create the computer
-                    cy.request('DELETE', 'http://localhost:3000/api/v1/products/' + productJson._id)
-                    // Check that this was accepted by the server (200 ok)
-                    .should((response) => {
-                        expect(response.status).to.eq(200)
-                     })
-
+                     cy.request('DELETE', 'http://localhost:3000/api/v1/products/' + browserProduct._id)
+                     // Check that this was accepted by the server (200 ok)
+                     .should((response) => {
+                         expect(response.status).to.eq(200)
+                      })
                 }
-            }
+                
+            });
+                
     })

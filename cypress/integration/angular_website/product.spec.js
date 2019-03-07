@@ -1,39 +1,48 @@
 context('manage product tests (CRUD)', () => {
 
     beforeEach(() => {
+
+      // open web page with base URL
         cy.visit('')
-
-        cy.fixture('product').then((product) => {
-          cy.deleteProducts(product);
-        })
-
       })
 
     it("creates a new product", () => {
 
         // Add a `fixture` function around our test steps
-        cy.fixture('product').then((product) => {      
+        cy.fixture('product').then((product) => {  
+          
+            // Given the product doesn't exist
+            cy.deleteProducts(product);
 
+            // click on add product button
             cy.get('.mat-flat-button, .mat-primary').click();
 
+            // check that we're now on the add product page
             cy.url().should('include', '/product-add');
 
-            // Change this step to use our `product name' from the test data
+            // fill out the name field with our test data
             cy.get('#mat-input-0').type(product.name);
 
-            // Change this step to use our `product description`
+            // fill out the description field with our test data
             cy.get('#mat-input-1').type(product.description);
 
-            // Change this step to use our `product price`
+            // fill out the price field with our test data
             cy.get('#mat-input-2').type(product.price);
 
+            // click on the save button
             cy.get('[type="submit"]').click();
 
-            // Change this assertion so it checks against the `product name in the test data`.
+            // Check that the product is created
             cy.get('h2').should('contain',product.name);
 
         })
 
     })  
+
+    // edit product test
+
+    // view product test
+
+    // delete product test
 
 })
