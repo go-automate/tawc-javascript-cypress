@@ -25,27 +25,50 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 // Cypress will send HTTP requests to check to see if the product is alread present in the list. If it is, delete it.
-Cypress.Commands.add("deleteProducts", (product) => {
+Cypress.Commands.add("deleteProducts", testProduct => {
 
-            var responseBody;
-            
-            // Store the response array of products
-            cy.request('http://localhost:3000/api/v1/products')
-                .then((response) => {
-                    responseBody = response.body;
-                })
-            
-                // loop through the array of objects
-            responseBody.array.forEach(browserProduct => {
-                if(browserProduct.prod_name == product.name){
-                     // Send a DELETE request to create the computer
-                     cy.request('DELETE', 'http://localhost:3000/api/v1/products/' + browserProduct._id)
-                     // Check that this was accepted by the server (200 ok)
-                     .should((response) => {
-                         expect(response.status).to.eq(200)
-                      })
-                }
-                
-            });
-                
-    })
+  /**
+   * Command - captures the response body and passes it to our parsing and deleting functions
+   */
+  cy.request("http://localhost:3000/api/v1/products").then(response => {
+    checkForProducts(response.body);
+  });
+
+  /**
+   * parses the array for any products that match the test data
+   * @param {Array} body - an array of objects (products)
+   */
+  function checkForProducts(body) {
+    for (var product of body) {
+      if (product.prod_name === testProduct.name) {
+        deleteAProduct(product);
+      }
+    }
+  }
+
+  /**
+   * Deletes a product
+   * @param {Object} product object
+   */
+  function deleteAProduct(product) {
+    // Send a DELETE request to create the computer
+    cy.request("DELETE", "http://localhost:3000/api/v1/products/" + product._id)
+      // Check that this was accepted by the server (200 ok)
+      .should(response => {
+        expect(response.status).to.eq(200);
+      });
+  }
+});
+
+Cypress.Commands.add("checkForProduct", testProduct => {
+
+  cy.request("http://localhost:3000/api/v1/products").then(response => {
+    for (var product of response.body) {
+      if (product.prod_name === testProduct.name) {
+        return true;
+      }
+      return false;
+    }
+  });
+
+})
