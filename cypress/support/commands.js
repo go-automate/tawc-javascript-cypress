@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 // Cypress will send HTTP requests to check to see if the product is alread present in the list. If it is, delete it.
-Cypress.Commands.add("deleteProducts", testProduct => {
+Cypress.Commands.add("deleteProducts", testProductName => {
 
   /**
    * Command - captures the response body and passes it to our parsing and deleting functions
@@ -40,7 +40,7 @@ Cypress.Commands.add("deleteProducts", testProduct => {
    */
   function checkForProducts(body) {
     for (var product of body) {
-      if (product.prod_name === testProduct.name) {
+      if (product.prod_name === testProductName) {
         deleteAProduct(product);
       }
     }
@@ -69,8 +69,8 @@ Cypress.Commands.add("checkForProduct", testProduct => {
       if (product.prod_name === testProduct.name) {
         return true;
       }
-      return false;
     }
+   return false;
   });
 
 });

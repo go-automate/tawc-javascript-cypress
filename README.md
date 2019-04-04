@@ -13,4 +13,6 @@ Also automatically warns you about:
 1. any JavaScript errors in the website
 2. if a button or element is offscreen (e.g. you have to scroll to see it) - not sure how you set the viewport?
 
-Debugging is amazing - but it still seems tricky to grab a value of a variable from the code and display it on screen... 
+Debugging is amazing - but it still seems tricky to grab a value of a variable from the code and display it on screen... although can just do console.log
+
+Loving jquery selectors!
