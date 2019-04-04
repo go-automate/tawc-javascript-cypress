@@ -6,71 +6,84 @@ context("manage product tests (CRUD)", () => {
     cy.visit("");
   });
 
-  it("create a product", () => {
+  // it("create a product", () => {
 
-    // Import our test data
-    cy.fixture("product").then(products => {
-      for(let product of products){
+  //   // Import our test data
+  //   cy.fixture("product").then(products => {
+  //     for(let product of products){
 
-      // CPSU01
-      // SETUP: Check whether the `Product` is present in the list, if it's there, delete it.
-      cy.deleteProducts(product);
+  //       console.log("Here's our product")
+  //       console.log(product)
 
-      // ASSERT: `Product` isn't in list.
-      cy.checkForProduct(product).should("eq", false)
+  //     // CPSU01
+  //     // SETUP: Check whether the `Product` is present in the list, if it's there, delete it.
+  //     cy.deleteProducts(product);
 
-      // CP02
-      // Click on the `Add Product` button
-      cy.get(".mat-flat-button, .mat-primary").click();
+  //     // ASSERT: `Product` isn't in list.
+  //     cy.checkForProduct(product).should("eq", false)
 
-      // ASSERT: We're on the `Add Product` page
-      cy.url().should("include", "/product-add");
+  //     // CP02
+  //     // Click on the `Add Product` button
+  //     cy.get(".mat-flat-button, .mat-primary").click();
 
-      // CP03
-      // Enter a `Name`, `Description` and `Price` for a Product (see `test-data.adoc` for Test Data)
-      // `Product` details entered      
-      cy.get('input[formcontrolname="prod_name"]').type(product.name);
-      cy.get('input[formcontrolname="prod_desc"]').type(product.description);
-      cy.get('input[formcontrolname="prod_price"]').type(product.price);
+  //     // ASSERT: We're on the `Add Product` page
+  //     cy.url().should("include", "/product-add");
 
-      cy.get('[type="submit"]').click();
+  //     // CP03
+  //     // Enter a `Name`, `Description` and `Price` for a Product (see `test-data.adoc` for Test Data)
+  //     // `Product` details entered      
+  //     cy.get('input[formcontrolname="prod_name"]').type(product.name);
+  //     cy.get('input[formcontrolname="prod_desc"]').type(product.description);
+  //     cy.get('input[formcontrolname="prod_price"]').type(product.price);
 
-      // CP04
-      // Press the `Save` button.
-      // ASSERT: The `View` product page opens.
-      cy.url().should("include", "/product-details")
+  //     cy.get('[type="submit"]').click();
 
-      // ASSERT: The product details are correct (`name`, `description`, `price`).
-      cy.get("h2").should("contain", product.name);
-      cy.get("mat-card-subtitle.mat-card-subtitle").should("contain", product.description);
-      cy.get("dl dd:first").should("contain", product.price)
+  //     // CP04
+  //     // Press the `Save` button.
+  //     // ASSERT: The `View` product page opens.
+  //     cy.url().should("include", "/product-details")
 
-      // CP05
-      // Press the `Products Page` button.
-      // ASSERT: We're returned to the `Products Page`.
-      cy.get("div.button-row a.mat-flat-button.mat-primary").click();
+  //     // ASSERT: The product details are correct (`name`, `description`, `price`).
+  //     cy.get("h2").should("contain", product.name);
+  //     cy.get("mat-card-subtitle.mat-card-subtitle").should("contain", product.description);
+  //     cy.get("dl dd:first").should("contain", product.price)
 
-      // ASSERT: The new `Product` is listed.
-      cy.get("td.cdk-column-prod_name:last").should("contain", product.name);
-      cy.get("td.cdk-column-prod_price:last").should("contain", product.price);
+  //     // CP05
+  //     // Press the `Products Page` button.
+  //     // ASSERT: We're returned to the `Products Page`.
+  //     cy.get("div.button-row a.mat-flat-button.mat-primary").click();
 
-      // CPTD01
-      // TEARDOWN: Delete the `Product` that was created.
-      cy.deleteProducts(product);
+  //     // ASSERT: The new `Product` is listed.
+  //     cy.get("td.cdk-column-prod_name:last").should("contain", product.name);
+  //     cy.get("td.cdk-column-prod_price:last").should("contain", product.price);
+
+  //     // CPTD01
+  //     // TEARDOWN: Delete the `Product` that was created.
+  //     cy.deleteProducts(product);
       
-      // Check product is no longer present
-      cy.checkForProduct(product).should("eq", false)
+  //     // Check product is no longer present
+  //     cy.checkForProduct(product).should("eq", false)
 
-      }
+  //     }
 
-    });
-  });
+  //   });
+  // });
 
   // edit product test
 
   it("edit a product", () => {
+
+    // cy.deleteAllProducts();
+
+        // Import our test data
+        cy.fixture("product").then(products => {
+          for(let product of products){
     // EPSU01
     // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
+
+    cy.addProduct(product)
+    
+
     // ASSERT: `Product` in list.
     // EP01
     // Navigate to the `Products Page`
@@ -97,6 +110,10 @@ context("manage product tests (CRUD)", () => {
     // EPTD01
     // TEARDOWN: Delete the `Product` that was created.
     // ASSERT: `Product` is no longer listed.
+
+          }
+        });
+
   });
 
   // view product test

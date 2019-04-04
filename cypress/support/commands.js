@@ -60,6 +60,8 @@ Cypress.Commands.add("deleteProducts", testProduct => {
   }
 });
 
+
+// Check if a product is present in the list
 Cypress.Commands.add("checkForProduct", testProduct => {
 
   cy.request("http://localhost:3000/api/v1/products").then(response => {
@@ -71,4 +73,87 @@ Cypress.Commands.add("checkForProduct", testProduct => {
     }
   });
 
+});
+
+
+// Cypress will send HTTP requests to check to see if the product is alread present in the list. If it isn't, create it.
+Cypress.Commands.add("addProduct", testProduct => {
+
+  /**
+   * Command - captures the response body and passes it to our parsing and deleting functions
+   */
+  cy.request("http://localhost:3000/api/v1/products").then(response => {
+    checkForProducts(response.body);
+  });
+
+  /**
+   * parses the array for any products that match the test data
+   * @param {Array} body - an array of objects (products)
+   */
+  function checkForProducts(body) {
+    var check = 0;
+    for (var product of body) {
+      if (product.prod_name === testProduct.name) {
+        check = check + 1
+      }
+    }
+    if (check === 0){
+      addAProduct(testProduct)
+    }
+  }
+
+  /**
+   * Adds a product
+   * @param {Object} product object
+   */
+  function addAProduct(product) {
+
+    var apiProduct = { prod_name : product.name, prod_desc : product.description, prod_price : product.price }
+
+    var requestBody = JSON.stringify(apiProduct)
+
+    cy.request({
+      method: 'POST',
+      url: 'http://localhost:3000/api/v1/products',
+      body: requestBody,
+      headers: { 'Content-Type' : 'application/json; charset=utf-8' },
+    }).should(response => {
+      expect(response.status).to.eq(200);
+  })
+}
+
 })
+
+Cypress.Commands.add("deleteAllProducts", () => {
+
+  /**
+   * Command - captures the response body and passes it to our parsing and deleting functions
+   */
+  cy.request("http://localhost:3000/api/v1/products").then(response => {
+    checkForProducts(response.body);
+  });
+
+  /**
+   * parses the array for any products that match the test data
+   * @param {Array} body - an array of objects (products)
+   */
+  function checkForProducts(body) {
+    for (var product of body) {
+        deleteAProduct(product);
+    }
+  }
+
+  /**
+   * Deletes a product
+   * @param {Object} product object
+   */
+  function deleteAProduct(product) {
+    // Send a DELETE request to create the computer
+    cy.request("DELETE", "http://localhost:3000/api/v1/products/" + product._id)
+      // Check that this was accepted by the server (200 ok)
+      .should(response => {
+        expect(response.status).to.eq(200);
+      });
+  }
+});
+
