@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    container_name: 'mongodb'
+    networks:
+      - app-tier
+  crudapi:
+    image: 'safebear/angular-api:1.0.0'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "mongodb"
+    command: 'npm start'
+    container_name: 'angular-api'  
+    networks:
+      - app-tier
+  crudapp:
+    image: 'safebear/angular-app:1.0.0'
+    ports:
+      - "8080:80"
+    depends_on:
+      - "crudapi"
+    container_name: 'safebear-app'  
+    networks:
+      - app-tier
