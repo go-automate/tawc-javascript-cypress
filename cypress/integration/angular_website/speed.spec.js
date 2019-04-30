@@ -1,7 +1,7 @@
 context("Create Product", () => {
   beforeEach(() => {
     // API requests for setup
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // CPSU01
         // SETUP: Check whether the `Product` is present in the list, if it's there, delete it.
@@ -19,7 +19,7 @@ context("Create Product", () => {
     // API requests for teardown
     // CPTD01
     // TEARDOWN: Delete the `Product` that was created.
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         cy.deleteProducts(product.name);
       }
@@ -28,7 +28,7 @@ context("Create Product", () => {
 
   it("create a product", () => {
     // Import our test data
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // ASSERT: `Product` isn't in list.
         cy.checkForProduct(product).should("eq", false);
@@ -81,7 +81,7 @@ context("Create Product", () => {
 context("Edit Product", () => {
   beforeEach(() => {
     // API requests for setup
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // EPSU01
         // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
@@ -101,7 +101,7 @@ context("Edit Product", () => {
     // API requests for teardown
     // EPTD01
     // TEARDOWN: Delete the `Product` that was created.
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         cy.deleteProducts(product.editName);
         // ASSERT: `Product` not in list.
@@ -114,7 +114,7 @@ context("Edit Product", () => {
 
   it("edit a product", () => {
     // Import our test data
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // EP01
         // Navigate to the `Products Page`
@@ -185,7 +185,7 @@ context("Edit Product", () => {
 context("View A Product", () => {
   beforeEach(() => {
     // API requests for setup
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // VPSU01
         // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
@@ -206,7 +206,7 @@ context("View A Product", () => {
     // VPTD01
     // TEARDOWN: Delete the `Product` that was created.
     // ASSERT: `Product` is no longer listed.
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         cy.deleteProducts(product.name);
         // ASSERT: `Product` not in list.
@@ -217,7 +217,7 @@ context("View A Product", () => {
 
   // view product test
   it("view a product", () => {
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // VP01
         // Navigate to the `Products Page`
@@ -254,7 +254,7 @@ context("View A Product", () => {
 context("Delete A Product", () => {
   beforeEach(() => {
     // API requests for setup
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // VPSU01
         // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
@@ -272,7 +272,7 @@ context("Delete A Product", () => {
 
   // delete product test
   it("delete a product", () => {
-    cy.fixture("product").then(products => {
+    cy.fixture("two-products").then(products => {
       for (let product of products) {
         // DP01
  // Navigate to the `Products Page`

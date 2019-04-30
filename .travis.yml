@@ -1,0 +1,21 @@
+dist: xenial
+language: node_js
+sudo: false
+node_js:
+  - "8"
+
+before_script:
+  - docker-compose up -d
+  - sleep 3
+  - docker restart angular-api
+  - npm run updateSelenium
+  - npm run startSelenium 2>&1 &
+  - sleep 10
+  - echo Selenium Server started
+#  - "npm start 2>&1 &" //for ref when/if we include the app starting in here
+#  - "sleep 1"
+#  - "echo test app started"
+
+script: 
+ - npm run speedTest
+ - npm run reliabilityTest

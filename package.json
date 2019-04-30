@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cypress open"
+    "test": "cypress open",
+    "speedTest": "cypress run --spec 'cypress/integration/angular_website/speed.spec.js'",
+    "reliabilityTest": "cypress run --spec 'cypress/integration/angular_website/reliability.spec.js'"
+
   },
   "repository": {
     "type": "git",
