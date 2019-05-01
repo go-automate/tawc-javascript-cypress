@@ -31,7 +31,7 @@ context("Create Product", () => {
     cy.fixture("one-hundred-products").then(products => {
       for (let product of products) {
         // ASSERT: `Product` isn't in list.
-        cy.checkForProduct(product).should("eq", false);
+        // cy.checkForProduct(product).should("eq", false);
 
         // CP02
         // Click on the `Add Product` button
@@ -69,10 +69,7 @@ context("Create Product", () => {
 
         // ASSERT: The new `Product` is listed.
         cy.get("td.cdk-column-prod_name:last").should("contain", product.name);
-        cy.get("td.cdk-column-prod_price:last").should(
-          "contain",
-          product.price
-        );
+        cy.get("td.cdk-column-prod_price:last").should("contain",product.price);
       }
     });
   });

@@ -69,10 +69,7 @@ context("Create Product", () => {
 
         // ASSERT: The new `Product` is listed.
         cy.get("td.cdk-column-prod_name:last").should("contain", product.name);
-        cy.get("td.cdk-column-prod_price:last").should(
-          "contain",
-          product.price
-        );
+        cy.get("td.cdk-column-prod_price:last").should("contain", product.price);
       }
     });
   });

@@ -62,3 +62,7 @@ typings/
 
 # mocha report
 mochawesome-report/
+
+# screenshots and videos
+cypress/screenshots/
+cypress/videos/
