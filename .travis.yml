@@ -8,7 +8,7 @@ before_script:
   - docker-compose up -d
   - sleep 3
   - docker restart angular-api
-  - sleep 3
+  - npm install
 #  - "npm start 2>&1 &" //for ref when/if we include the app starting in here
 #  - "sleep 1"
 #  - "echo test app started"
