@@ -16,3 +16,5 @@ Also automatically warns you about:
 Debugging is amazing - but it still seems tricky to grab a value of a variable from the code and display it on screen... although can just do console.log
 
 Loving jquery selectors!
+
+Needed to install 'sudo apt install libgconf-2-4' on Ubuntu to get it working in CI (travis) - see pipeline
