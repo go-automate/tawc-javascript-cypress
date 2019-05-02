@@ -1,37 +1,24 @@
 context("Create Product", () => {
-  beforeEach(() => {
-    // API requests for setup
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        // CPSU01
-        // SETUP: Check whether the `Product` is present in the list, if it's there, delete it.
-        cy.deleteProducts(product.name);
-      }
-    });
-
-    // CP01
-    // Navigate to the `Products Page`
-    // ASSERT: We're on the `Products Page` of the Website
-    cy.visit("");
-  });
-
-  afterEach(() => {
-    // API requests for teardown
-    // CPTD01
-    // TEARDOWN: Delete the `Product` that was created.
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        cy.deleteProducts(product.name);
-      }
-    });
-  });
 
   it("create a product", () => {
+
+    beforeEach(() => {
+      // CP01
+      // Navigate to the `Products Page`
+      // ASSERT: We're on the `Products Page` of the Website
+      cy.visit("");
+    });
+
     // Import our test data
     cy.fixture("one-hundred-products").then(products => {
       for (let product of products) {
+
+        // CPSU01
+        // SETUP: Check whether the `Product` is present in the list, if it's there, delete it.
+        cy.deleteProducts(product.name);
+
         // ASSERT: `Product` isn't in list.
-        // cy.checkForProduct(product).should("eq", false);
+        cy.checkForProduct(product).should("eq", false);
 
         // CP02
         // Click on the `Add Product` button
@@ -70,51 +57,39 @@ context("Create Product", () => {
         // ASSERT: The new `Product` is listed.
         cy.get("td.cdk-column-prod_name:last").should("contain", product.name);
         cy.get("td.cdk-column-prod_price:last").should("contain",product.price);
+
+        // API requests for teardown
+        // CPTD01
+        // TEARDOWN: Delete the `Product` that was created.
+        cy.deleteProducts(product.name);
+
       }
     });
   });
 });
 
 context("Edit Product", () => {
-  beforeEach(() => {
-    // API requests for setup
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        // EPSU01
-        // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
-        cy.addProduct(product);
-        // ASSERT: `Product` in list.
-        cy.checkForProduct(product).should("eq", true);
-      }
-    });
 
+  // edit product test
+
+  beforeEach(() => {
     // CP01
     // Navigate to the `Products Page`
     // ASSERT: We're on the `Products Page` of the Website
     cy.visit("");
   });
 
-  afterEach(() => {
-    // API requests for teardown
-    // EPTD01
-    // TEARDOWN: Delete the `Product` that was created.
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        cy.deleteProducts(product.editName);
-        // ASSERT: `Product` not in list.
-        cy.checkForProduct(product).should("eq", false);
-      }
-    });
-  });
-
-  // edit product test
-
   it("edit a product", () => {
     // Import our test data
     cy.fixture("one-hundred-products").then(products => {
       for (let product of products) {
-        // EP01
-        // Navigate to the `Products Page`
+
+        // EPSU01
+        // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
+        cy.addProduct(product);
+        // ASSERT: `Product` in list.
+        cy.checkForProduct(product).should("eq", true);
+
         // ASSERT: We're on the `Products Page` of the Website
         cy.url().should("include", "/products");
 
@@ -174,48 +149,37 @@ context("Edit Product", () => {
         // ASSERT: The `name` and `description` have been updated.
         cy.get("td:contains(" + product.editName + ")").should("be.visible");
         cy.get("td:contains(" + product.editPrice + ")").should("be.visible");
+
+        // EPTD01
+        // TEARDOWN: Delete the `Product` that was created.
+        cy.deleteProducts(product.editName);
+        // ASSERT: `Product` not in list.
+        cy.checkForProduct(product).should("eq", false);
       }
     });
   });
 });
 
 context("View A Product", () => {
-  beforeEach(() => {
-    // API requests for setup
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        // VPSU01
-        // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
-        cy.addProduct(product);
-        // ASSERT: `Product` in list.
-        cy.checkForProduct(product).should("eq", true);
-      }
-    });
 
+  beforeEach(() => {
     // CP01
     // Navigate to the `Products Page`
     // ASSERT: We're on the `Products Page` of the Website
     cy.visit("");
   });
 
-  afterEach(() => {
-    // API requests for teardown
-    // VPTD01
-    // TEARDOWN: Delete the `Product` that was created.
-    // ASSERT: `Product` is no longer listed.
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        cy.deleteProducts(product.name);
-        // ASSERT: `Product` not in list.
-        cy.checkForProduct(product).should("eq", false);
-      }
-    });
-  });
-
   // view product test
   it("view a product", () => {
     cy.fixture("one-hundred-products").then(products => {
       for (let product of products) {
+
+        // VPSU01
+        // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
+        cy.addProduct(product);
+        // ASSERT: `Product` in list.
+        cy.checkForProduct(product).should("eq", true);
+
         // VP01
         // Navigate to the `Products Page`
         // ASSERT: We're on the `Products Page` of the Website
@@ -242,6 +206,13 @@ context("View A Product", () => {
 
         // Click on the `Products Page` button
         cy.get('[href*="products"]').click();
+
+        // VPTD01
+        // TEARDOWN: Delete the `Product` that was created.
+        // ASSERT: `Product` is no longer listed.
+        cy.deleteProducts(product.name);
+        // ASSERT: `Product` not in list.
+        cy.checkForProduct(product).should("eq", false);
         
       }
     });
@@ -250,34 +221,30 @@ context("View A Product", () => {
 
 context("Delete A Product", () => {
   beforeEach(() => {
-    // API requests for setup
-    cy.fixture("one-hundred-products").then(products => {
-      for (let product of products) {
-        // VPSU01
-        // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
-        cy.addProduct(product);
-        // ASSERT: `Product` in list.
-        cy.checkForProduct(product).should("eq", true);
-      }
+        // CP01
+        // Navigate to the `Products Page`
+        // ASSERT: We're on the `Products Page` of the Website
+        cy.visit("");
     });
-
-    // CP01
-    // Navigate to the `Products Page`
-    // ASSERT: We're on the `Products Page` of the Website
-    cy.visit("");
-  });
 
   // delete product test
   it("delete a product", () => {
     cy.fixture("one-hundred-products").then(products => {
       for (let product of products) {
+
+        // VPSU01
+        // SETUP: Check whether the `Product` is present in the list, if it's not, create it.
+        cy.addProduct(product);
+        // ASSERT: `Product` in list.
+        cy.checkForProduct(product).should("eq", true);
+
         // DP01
- // Navigate to the `Products Page`
- // ASSERT: We're on the `Products Page` of the Website
+        // Navigate to the `Products Page`
+        // ASSERT: We're on the `Products Page` of the Website
         cy.url().should("include", "/products");
 
         // DP02
- // Click on the `Product` name
+        // Click on the `Product` name
         cy.get("td:contains(" + product.name + ")").click();
 
         // ASSERT: We're on the `View Product` page
